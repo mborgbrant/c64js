@@ -1,11 +1,13 @@
 'use strict';
 
-var gulp = require('gulp');
-var useref = require('gulp-useref');
-var gulpif = require('gulp-if');
-var uglify = require('gulp-uglify');
-var cleanCss = require('gulp-clean-css');
-var clean = require('gulp-clean');
+const gulp = require('gulp');
+const useref = require('gulp-useref');
+const gulpif = require('gulp-if');
+const uglify = require('gulp-uglify');
+const cleanCss = require('gulp-clean-css');
+const clean = require('gulp-clean');
+const ghPages = require('gulp-gh-pages');
+const fs = require('fs');
 
 gulp.task('clean', function() {
 	return gulp.src('dist', {read: false})
@@ -32,7 +34,13 @@ gulp.task('compress', ['clean'], function() {
 });
 
 gulp.task('copy', ['compress'], function() {
+	fs.writeFileSync('dist/CNAME', 'www.c64js.com');
 	return gulp.src('src/fonts/**').pipe(gulp.dest('dist/fonts'));
 });
 
 gulp.task('default', ['clean', 'compress', 'copy']);
+
+gulp.task('deploy', ['default'], function() {
+	return gulp.src('./dist/**/*')
+		.pipe(ghPages());
+});
