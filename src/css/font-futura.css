@@ -1,0 +1,12 @@
+/* URL: http://www.futurafontfree.com/fonts/futura-font-free-download/ */
+@font-face {
+    font-family: 'Futura T OT';
+    src:url('../fonts/Futura-T-OT-Book_19064.eot?v=4.5.0');
+    src:url('../fonts/Futura-T-OT-Book_19064.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Futura-T-OT-Book_19064.woff2') format('woff2'),
+        url('../fonts/Futura-T-OT-Book_19064.woff') format('woff'),
+        url('../fonts/Futura-T-OT-Book_19064.ttf') format('truetype'),
+        url('../fonts/Futura-T-OT-Book_19064.svg') format('svg');
+    font-weight:normal;
+    font-style:normal
+}

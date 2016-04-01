@@ -1,0 +1,72 @@
+* { box-sizing: border-box; }
+html, body { padding: 0; margin: 0;  }
+body { background: #008080; color:#222; width: 100%; height: 100%; }
+
+div#emulatorContainer { margin-top: 40px; margin-bottom: 40px; box-sizing: content-box; }
+div#screenCanvasFs { width: 100%; height: 100%; background: #222;}
+div#emulatorSize { margin: 0 auto; width: 384px; height: 272px; border-radius: 8px 8px 0 0; border: 8px solid #222; border-width: 12px 16px; box-sizing: content-box; display: block; transition: 200ms ease-in-out all;}
+div#emulatorSize.zoom { width: 768px; height: 544px; transition: 200ms ease-in-out all; }
+canvas { display: block; margin: 0 auto; height: 100%; background: black; border-radius: 5px; border-color: black;}
+
+.pull-right { float: right; }
+.link-pointer { cursor: pointer; }
+.link-pointer:hover, .link-pointer.active { color: #fff; }
+.disc-menu { display: none; }
+.disc-menu.disc-loaded { display: inline; }
+
+input#fileElement { display: none; }
+
+.copyrightInfo { z-index: 1000; font-family: 'Futura T OT'; font-size: 14px; width: 100%; text-align: center; position: fixed; bottom: 0; left: 0; padding: 10px; padding-right: 20px; background: #222; color: #eee;}
+
+div#controlPanel {
+    font-family: monospace;
+    margin: 0 auto;
+    width: 416px;
+    border: 1px solid #222;
+    border-top: 0;
+    background: #222; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#222, #444); /* For Safari 5.1 to 6.0 */
+    background: -moz-linear-gradient(#222, #444); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#222, #444); /*, #222, #000); /* Standard syntax */
+    height: 30px;
+    color: #ccc;
+    text-shadow: 1px 1px #000;
+    padding: 0 27px;
+    border-radius: 0 0 8px 8px;
+    cursor: default;
+    transition: 200ms ease-in-out all;
+}
+
+div#controlPanel.zoom {
+    width: 800px;
+    transition: 200ms ease-in-out all;
+}
+
+.menuContainer {
+    font-family: monospace;
+    z-index: 100;
+    color: #eee;
+    text-shadow: 1px 1px #000;
+    font-size: 12px;
+    padding: 10px 0;
+    position: absolute;
+    background-color: rgba(51,51,51,1);
+    border: solid 2px #eee;
+    border-radius: 4px;
+    -webkit-box-shadow: 0px 10px 29px 0px rgba(51,51,51,1);
+    -moz-box-shadow: 0px 10px 29px 0px rgba(51,51,51,1);
+    box-shadow: 0px 10px 29px 0px rgba(51,51,51,1);
+ }
+.menuContainer:after, .menuContainer:before { top: 100%; left: 50%; border: solid transparent; content: ' '; height: 0; width: 0; position: absolute; pointer-events: none; }
+.menuContainer:after { border-color: rgba(51, 51, 51, 0); border-top-color: rgba(51,51,51,1); border-width: 10px; margin-left: -10px; }
+.menuContainer:before { border-color: rgba(194, 225, 245, 0); border-top-color: #eee; border-width: 13px; margin-left: -13px; }
+
+.menuContainer table { border-spacing: 0; }
+.menuContainer table td { cursor: pointer; padding-top: 2px; padding-bottom: 2px; white-space: pre; }
+.menuContainer table td.separator { cursor: default; padding:0; }
+.menuContainer table td.separator:hover { background: #333; }
+.menuContainer table td.separator div { cursor: default; padding:0; padding-top: 6px; margin-bottom: 5px; border-bottom: 1px solid #777;}
+.menuContainer table td:nth-child(1) { padding-left: 10px; }
+.menuContainer table td:nth-last-child(1) { padding-right: 10px; }
+.menuContainer table td i.more { padding-left: 6px; }
+.menuContainer table tr:hover { background-color: #666; }
