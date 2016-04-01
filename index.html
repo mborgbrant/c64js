@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>c64js, the c64 emulator written in JavaScript</title>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="css/c64.css">
+		<script src="js/c64.js"></script>
+	</head>
+	<body>
+		<a class="github-fork-ribbon right-top" href="https://github.com/mborgbrant/c64js" title="Fork me on GitHub">Fork me on GitHub</a>
+
+		<div id="emulatorContainer">
+			<div id="emulatorSize">
+				<div id="screenCanvasFs">
+					<canvas id="screenCanvas" width="384" height="272" onclick="main.exitFullscreen()"></canvas>
+				</div>
+			</div>
+			<div id="controlPanel">
+				<i class="fa fa-power-off fa-fw link-pointer" onclick="menu.closeMenu(); mos6510.reset();" title="Reset"></i>
+				<i class="fa fa-television fa-fw pull-right link-pointer" onclick="main.fullscreen();" title="Fullscreen mode"></i>
+				<i class="fa fa-arrows-alt fa-fw pull-right link-pointer" onclick="main.zoom(this);" title="Zoom 2x"></i>
+			</div>
+		</div>
+
+		<div class="copyrightInfo">
+			&copy; 2015 - 2016, Mikael Borgbrant, www.c64js.com.
+		</div>
+
+		<input type="file" id="fileElement" name="romFile" />
+		<script>
+			window.onload = function() {
+				vic2.setScreenCanvas(document.getElementById('screenCanvas'));
+				fileLoad.setDropArea(document.getElementById('screenCanvas'));
+				main.start();
+			}
+		</script>
+	</body>
+</html>
