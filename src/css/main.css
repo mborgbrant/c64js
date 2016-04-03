@@ -22,6 +22,7 @@ input#fileElement { display: none; }
 	color: #eee;
 	width: 384px;
 	margin: 0 auto;
+	padding-bottom: 50px;
 }
 
 .general-info strong {
