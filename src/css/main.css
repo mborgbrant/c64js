@@ -16,6 +16,23 @@ canvas { display: block; margin: 0 auto; height: 100%; background: black; border
 
 input#fileElement { display: none; }
 
+.general-info {
+	font-family: 'Futura T OT';
+	font-size: 14px;
+	color: #eee;
+	width: 384px;
+	margin: 0 auto;
+}
+
+.general-info strong {
+	font-size: 20px;
+}
+
+.general-info a {
+	color: #fff;
+	font-size: 16px;
+}
+
 .copyrightInfo { z-index: 1000; font-family: 'Futura T OT'; font-size: 14px; width: 100%; text-align: center; position: fixed; bottom: 0; left: 0; padding: 10px; padding-right: 20px; background: #222; color: #eee;}
 
 div#controlPanel {

@@ -1,5 +1,5 @@
 # Contributors
-- Mikael Borgbrant, mikael.borgbrant [at] gmail [dot] com
+- Mikael Borgbrant, mikael [dot] borgbrant [at] gmail [dot] com
 
 # Contribution guidelines
 Please ensure your pull request adheres to the following guidelines:

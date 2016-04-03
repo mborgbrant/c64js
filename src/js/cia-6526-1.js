@@ -110,7 +110,6 @@ memoryManager.cia1.onReadByte = function(address) {
 		// data port A	- joystick port 2
 		case 0x00:
 			return keyboard.getJoyStickByte(1) ^ 0xff;
-			break;
 		// data port B
 		case 0x01:
 			// when read/write state: keyboard matrix cols
@@ -120,49 +119,39 @@ memoryManager.cia1.onReadByte = function(address) {
 				return ((memoryManager.cia1.rows ^ 0xff) | keyboard.getJoyStickByte(0)) ^ 0xff;
 			var keyboardColVal = (keyboard.row[memoryManager.cia1.rows ^ 0xff] || 0x00);
 			return (keyboardColVal | keyboard.getJoyStickByte(0)) ^ 0xff;
-			
+
 		// direction of data port A (0 = read only, 1 = read and write)
 		case 0x02:
 			return memoryManager.cia1.directionOfPortA;
-			break;
 		// direction of data port B (0 = read only, 1 = read and write)
 		case 0x03:
 			return memoryManager.cia1.directionOfPortB;
-			break;
 		case 0x04:
 			return memoryManager.cia1.timer_A & 0x00ff;
-			return;
 		case 0x05:
 			return (memoryManager.cia1.timerA & 0xff00) >> 8;
-			break;
 		case 0x06:
 			return memoryManager.cia1.timer_B & 0x00ff;
-			return;
 		case 0x07:
 			return (memoryManager.cia1.timer_B & 0xff00) >> 8;
-			break;
 		/* 0x08 - 0x0b = TOD */
 		// READ; Bit 0..3: Tenth seconds in BCD-format ($0-$9), Bit 4..7: always 0
 		case 0x08:
 			// debug only
 			return ~~(Math.random() * 10);
-			break;
 		// Bit 0..3: Single seconds in BCD-format ($0-$9), Bit 4..6: Ten seconds in BCD-format ($0-$5), Bit 7: always 0
 		case 0x09:
 			// debug only
 			return ~~(Math.random() * 10);
-			break;
 		// Bit 0..3: Single minutes in BCD-format( $0-$9), Bit 4..6: Ten minutes in BCD-format ($0-$5), Bit 7: always 0
 		case 0x0A:
 			// debug only
 			return 0x48;
-			break;
 		// Bit 0..3: Single hours in BCD-format ($0-$9), Bit 4..6: Ten hours in BCD-format ($0-$5), Bit 7: Differentiation AM/PM, 0=AM, 1=PM
 		// Writing into this register stops TOD, until register 8 (TOD 10THS) will be read.
 		case 0x0B:
 			// debug only
 			return 0x11;
-			break;
 		/* 0x0c = The byte within this register will be shifted bitwise to or from the SP-pin with every positive slope at the CNT-pin. */
 		case 0x0d:
 			/* TODO */
@@ -176,7 +165,7 @@ memoryManager.cia1.onReadByte = function(address) {
 };
 
 memoryManager.cia1.process = function(clockTicksElapsed) {
-	
+
 	// Timer A
 	if (this.timer_A_isStarted) {
 		if (this.timer_A > 0) {
@@ -184,7 +173,7 @@ memoryManager.cia1.process = function(clockTicksElapsed) {
 		}
 		else {
 			this.timer_A = 0;
-		} 
+		}
 		if (this.timer_A <= 0) {
 			if (this.timer_A_restartOnUnderflow) {
 				this.timer_A = this.timer_A_latch;
@@ -192,13 +181,13 @@ memoryManager.cia1.process = function(clockTicksElapsed) {
 				this.timer_A_underflow = true;
 				this.timer_A_isStarted = false;
 			}
-			
+
 			if (this.timer_A_irq_enabled) {
 				mos6510.irq = true;
 			}
 		}
 	}
-	
+
 	// Timer B
 	if (this.timer_B_isStarted) {
 		if (this.timer_B > 0) {
@@ -214,7 +203,7 @@ memoryManager.cia1.process = function(clockTicksElapsed) {
 				this.timer_B_underflow = true;
 				this.timer_B_isStarted = false;
 			}
-			
+
 			if (this.timer_B_irq_enabled) {
 				mos6510.irq = true;
 			}

@@ -44,6 +44,18 @@
 			</div>
 		</div>
 
+		<div class="general-info">
+			<p>
+				<strong>Note: </strong>Right now this is more of a proof of concept than a fully working emulator. Still there are features that are not even emulated, such as the SID chip (for sound), and some of the graphical modes in the VIC-II chip.
+			</p>
+			<p>
+				It is possible to execute rom files in .prg format. In order to do so, drop them on the emulators canvas area above. However, due to the fact that not every feature of the original hardware is implemented yet, not all roms will be executing flawlessly.
+			</p>
+			<p>
+				If you want to try out a game running through this emulator, check out SoS fantastic implementation of Flappy birds for C64. It can be found <a href="http://sos.gd/flappy64/">here</a>.
+			</p>
+		</div>
+
 		<div class="copyrightInfo">
 			&copy; 2015 - 2016, Mikael Borgbrant, www.c64js.com.
 		</div>
@@ -54,7 +66,7 @@
 				vic2.setScreenCanvas(document.getElementById('screenCanvas'));
 				fileLoad.setDropArea(document.getElementById('screenCanvas'));
 				main.start();
-			}	
+			}
 		</script>
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
