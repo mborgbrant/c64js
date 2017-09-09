@@ -78,6 +78,7 @@ main.start = function () {
 	cpuMemoryManager.init();
 	mos6510.init(cpuMemoryManager);
 	vic2.init(vicMemoryManager);
+    sid.init()
 
 	var badLine = false;
 	var cpuCycles = 0;
