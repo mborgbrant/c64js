@@ -13,7 +13,8 @@ window.requestAnimFrame = (function () {
 		window.oRequestAnimationFrame ||
 		window.msRequestAnimationFrame ||
 		function (callback, element) {
-			window.setTimeout(callback, 1000 / 60);
+			//window.setTimeout(callback, 1000 / 60);
+			window.setTimeout(callback, 1000 / 50.125);
 		};
 })();
 
@@ -83,6 +84,7 @@ main.start = function () {
 	var badLine = false;
 	var cpuCycles = 0;
 	var frameInterlaceToggle = 0;
+    var cycles = 19656;
 
 	var doCycles = function () {
 
@@ -90,8 +92,8 @@ main.start = function () {
 		if (frameInterlaceToggle > 0)
 			frameInterlaceToggle = 0;
 
-		/* (504 * 312) / 8 = 19656 */
-		for (var i = 0; i < 19656; i++) {
+		/* (504 * 312) / 8 = 19656 cycles to draw entire screen */
+		for (var i = 0; i < cycles; i++) {
 
 			if (!badLine) {
 				// High phase
@@ -104,7 +106,7 @@ main.start = function () {
 					main.stop = true;
 				}
 
-				cpuCycles--;
+                cpuCycles--;
 			}
 			// Low phase
 			badLine = vic2.process(i, frameInterlaceToggle);
@@ -114,9 +116,9 @@ main.start = function () {
 			}
 		}
 
-		// This should be in the clock loop, but it didn't work for now
-		memoryManager.cia1.process(19656);
-		memoryManager.cia2.process(19656);
+		// TODO: This should be in the clock loop, but it didn't work for now
+		memoryManager.cia1.process(cycles);
+		memoryManager.cia2.process(cycles);
 
 		if (!main.stop) {
 			window.requestAnimFrame(doCycles);

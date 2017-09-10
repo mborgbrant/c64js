@@ -1,13 +1,35 @@
 
 var sid = sid || {};
 
+/*
+The following is ripped from jssid.core.js and shouldn't be uncommented here.
+It is used purely for informational purposes.
+
+jsSID.quality = Object.freeze({
+        low: "tinysid",
+        medium: "fastsid",
+        good: "resid_fast",
+        better: "resid_interpolate",
+        best: "resid_resample_interpolate",
+        broken: "resid_resample_fast"
+});
+*/
+
 sid.init = function() {
     //sidPlayer = new jsSID.SIDPlayer({ quality: getQuality(), clock: getFreq(), model: getModel() });
-    //sidPlayer = new jsSID.SIDPlayer({ quality: "good", clock: "PAL", model: "MOS6581" });
-    sidPlayer = new jsSID.SIDPlayer();
+    //sidPlayer = new jsSID.SIDPlayer({quality: jsSID.quality.good, clock: jsSID.chip.clock.PAL, model: jsSID.chip.model.MOS6581});
+    //sidPlayer = new jsSID.SIDPlayer();
+    sidPlayer = new jsSID.SIDPlayer({quality: jsSID.quality.low});
     sidPlayer.play();
 }
 
+sid.play = function () {
+    sidPlayer.play();
+}
+
+sid.stop = function () {
+    sidPlayer.stop();
+}
 
 // constructor
 jsSID.SIDPlayer = function(opts) {
@@ -67,8 +89,9 @@ jsSID.SIDPlayer.prototype.getNextFrame = function() {
 		// this.cpu.cpuJSR(this.sidfile.play_addr, 0);
 		// check if CIA timing is used, and adjust
 
-        var nRefreshCIA = Math.floor(20000 * (cpuMemoryManager.readByte(0xdc04) | (cpuMemoryManager.readByte(0xdc05) << 8)) / 0x4c00);
-        if ((nRefreshCIA === 0) || (this.sidspeed === 0)) nRefreshCIA = 20000;
+        //var nRefreshCIA = Math.floor(20000 * (cpuMemoryManager.readByte(0xdc04) | (cpuMemoryManager.readByte(0xdc05) << 8)) / 0x4c00);
+        var nRefreshCIA = Math.floor(20000 * (mos6510.memory.readByte(0xdc04) | (mos6510.memory.readByte(0xdc05) << 8)) / 0x4c00);
+        //if ((nRefreshCIA === 0) || (this.sidspeed === 0)) nRefreshCIA = 20000;
 		this.samplesPerFrame = Math.floor(this.synth.mix_freq * nRefreshCIA / 1000000);
 
 		this.samplesToNextFrame += this.samplesPerFrame;
