@@ -32,6 +32,7 @@ mos6510.register = {
 
 mos6510.reset = function () {
 	this.instructions.rst();
+    sid.stop();
 };
 
 mos6510.pushToStack = function (byte) {
