@@ -113,6 +113,9 @@ document.onkeydown = function(e) {
 		e.preventDefault();
 	}
 	
+    if (e.keyCode == 33) // PageUp mapped to RESTORE which is hardwired to NMI
+        mos6510.nmi = true;
+		
 	if (e.keyCode == 38)
 		keyboard.joystickUp = true;
 	if (e.keyCode == 40)
