@@ -12,10 +12,10 @@ fileLoad.saveToMemory = function() {
 		memoryManager.ram.onWriteByte(baseAddress + index, dataArray[index]);
 	}
 
-    var result = {filename:this.filename, base:baseAddress, length:dataArray.length}
-    this.data = [];
-    this.filename = "";
-    console.log('file "' + result.filename + '" is loaded into memory address $' + result.base.toString(16));
+	var result = {filename:this.filename, base:baseAddress, length:dataArray.length}
+	this.data = [];
+	this.filename = "";
+	console.log('file "' + result.filename + '" is loaded into memory address $' + result.base.toString(16));
 	return result;
 }
 
@@ -38,13 +38,13 @@ fileLoad.selectFile = function() {
 
 fileLoad.load = function(file) {
 	//if(file.name.toLowerCase().endsWith('.prg')) {
-		var reader = new FileReader();
-		reader.onload = function(e) {
-            fileLoad.data = reader.result;
-            fileLoad.filename = file.name;
-			fileLoad.writeAutoRun(); // Will trigger the LOAD hook
-		};
-		reader.readAsArrayBuffer(file);
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		fileLoad.data = reader.result;
+		fileLoad.filename = file.name;
+		fileLoad.writeAutoRun(); // Will trigger the LOAD hook
+	};
+	reader.readAsArrayBuffer(file);
 	/*
 	} else if(file.name.toLowerCase().endsWith('.d64')) {
 		fileLoad.parseD64.loadImage(file);
@@ -82,9 +82,9 @@ fileLoad.parseD64.loadItemFromImage = function(item) {
 		data = c;
 	}
 
-    fileLoad.data = data;
-    fileLoad.filename = item.object.name;
-    fileLoad.writeAutoRun(); // Will trigger the LOAD hook
+	fileLoad.data = data;
+	fileLoad.filename = item.object.name;
+	fileLoad.writeAutoRun(); // Will trigger the LOAD hook
 }
 
 fileLoad.parseD64.getSector = function(track, sector) {
