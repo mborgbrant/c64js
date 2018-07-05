@@ -3,3 +3,4 @@ dist/
 ext-c64-roms/
 ext-assets/
 .publish/
+.DS_Store
