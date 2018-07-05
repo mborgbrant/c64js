@@ -38,7 +38,7 @@ memoryManager.cia1.tod = {
 memoryManager.cia1.rows = 0x00;
 
 memoryManager.cia1.onWriteByte = function(address, data) {
-	switch(address - 0xdc00) {
+	switch(address & 0x000f) { // The CIA 1 register are according to https://www.c64-wiki.com/wiki/CIA mirrored each 16 Bytes
 		// data port A	- when read/write: keyboard matrix rows
 		case 0x00:
 			// keyboard row
@@ -105,8 +105,7 @@ memoryManager.cia1.onWriteByte = function(address, data) {
 };
 
 memoryManager.cia1.onReadByte = function(address) {
-
-	switch(address - 0xdc00) {
+	switch(address & 0x000f) { // The CIA 1 register are according to https://www.c64-wiki.com/wiki/CIA mirrored each 16 Bytes
 		// data port A	- joystick port 2
 		case 0x00:
 			return keyboard.getJoyStickByte(1) ^ 0xff;

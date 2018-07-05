@@ -28,7 +28,7 @@ memoryManager.cia2.setVicBank = function(data) {
 };
 
 memoryManager.cia2.onWriteByte = function(address, data) {
-	switch(address - 0xdd00) {
+	switch(address & 0x00ff) {
 		case 0x00:
 			this.setVicBank(data);
 			break;
@@ -42,7 +42,7 @@ memoryManager.cia2.onWriteByte = function(address, data) {
 };
 
 memoryManager.cia2.onReadByte = function(address) {
-	switch(address - 0xdd00) {
+	switch(address & 0x00ff) {
 		case 0x00:
 			return memoryManager.cia2.vicBankRawByte;
 		case 0x02:
