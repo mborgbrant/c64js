@@ -37,7 +37,7 @@ keyboard.getJoyStickByte = function(port) {
 }
 
 document.onkeyup = function(e) {
-//    console.log("up: ", e, JSON.stringify(e));
+//	console.log("up: ", e, JSON.stringify(e));
 	if ((e.keyCode >= 37) && (e.keyCode <= 40)) {
 		keyboard.joystickUp = false;
 		keyboard.joystickDown = false;
@@ -114,8 +114,8 @@ document.onkeydown = function(e) {
 		e.preventDefault();
 	}
 	
-    if (e.keyCode == 33) // PageUp mapped to RESTORE which is hardwired to NMI
-        mos6510.nmi = true;
+	if (e.keyCode == 33) // PageUp mapped to RESTORE which is hardwired to NMI
+		mos6510.nmi = true;
 		
 	if (e.keyCode == 38)
 		keyboard.joystickUp = true;

@@ -1420,16 +1420,16 @@ mos6510.nmi = false;
 	
 mos6510.checkBreakPoints = function () {
 
-    // LOAD hook
-    if (this.register.pc == 0xF4A5 && fileLoad.data.byteLength > 0) {
-        var result = fileLoad.saveToMemory();
+	// LOAD hook
+	if (this.register.pc == 0xF4A5 && fileLoad.data.byteLength > 0) {
+		var result = fileLoad.saveToMemory();
 
-        this.register.x = (result.length & 0x00ff);
-        this.register.y = (result.length & 0xff00) >> 8;
-        this.register.a = 0;
-        this.register.status.carry = 0;
-        this.register.pc = 0xF5AE; // Return gadget
-    }
+		this.register.x = (result.length & 0x00ff);
+		this.register.y = (result.length & 0xff00) >> 8;
+		this.register.a = 0;
+		this.register.status.carry = 0;
+		this.register.pc = 0xF5AE; // Return gadget
+	}
 }
 
 // Returns the number of cycles the operation took.
@@ -1451,7 +1451,7 @@ mos6510.process = function () {
 		}
 	}
 
-    this.checkBreakPoints();
+	this.checkBreakPoints();
 
 	var instructionToExecute = this.getNextInstruction();
 
