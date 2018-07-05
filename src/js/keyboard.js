@@ -37,7 +37,7 @@ keyboard.getJoyStickByte = function(port) {
 }
 
 document.onkeyup = function(e) {
-	
+//    console.log("up: ", e, JSON.stringify(e));
 	if ((e.keyCode >= 37) && (e.keyCode <= 40)) {
 		keyboard.joystickUp = false;
 		keyboard.joystickDown = false;
@@ -80,10 +80,11 @@ document.onkeyup = function(e) {
 };
 
 document.onkeydown = function(e) {
+//	console.log("down: ", e, JSON.stringify(e));
 	var doPrevent = false;
 	
-	// Disable the default actions for the F-keys + tab key
-	var functionKeys = [112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 123, 9];
+	// Disable the default actions for the F-keys + tab key + space
+	var functionKeys = [112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 123, 9, 32];
 	if (functionKeys.indexOf(e.keyCode) > -1 || functionKeys.indexOf(e.which) > -1) {
 		e.preventDefault();
 	}
@@ -152,6 +153,7 @@ document.onkeydown = function(e) {
 	if (keyboardMapValue > -1) {
 		var row = Math.floor(keyboardMapValue / 8);
 		var col = (keyboardMapValue % 8);
+//		console.log("r: ", row, " col: ", col);
 		keyboard.row[1 << row] = keyboard.row[1 << row] | 1 << col;
 	}
 };
