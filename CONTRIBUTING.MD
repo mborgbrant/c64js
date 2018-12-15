@@ -1,5 +1,6 @@
 # Contributors
 - Mikael Borgbrant, mikael [dot] borgbrant [at] gmail [dot] com
+- Christian A. Weber, chris [at] gna [dot] ch
 
 # Contribution guidelines
 Please ensure your pull request adheres to the following guidelines:

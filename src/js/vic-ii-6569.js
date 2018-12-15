@@ -198,11 +198,6 @@ vic2.screenControlRegister = {
 		vic2.screenControlRegister.renderMode = (data & 0x20) > 0;
 		vic2.screenControlRegister.extendedBackground = (data & 0x40) > 0;
 		vic2.screenControlRegister.interruptRasterLine = ((data & 0x80) << 1) | (vic2.screenControlRegister.interruptRasterLine & 0xff);
-		if (vic2.screenControlRegister.renderMode == true) {
-			console.log('bitmap mode');
-		} else {
-			console.log('text mode');
-		}
 		if (vic2.screenControlRegister.extendedBackground) {
 			console.log('extended background in on');
 		}
@@ -477,8 +472,9 @@ vic2.getPixel = function(x, y) {
 	return color;
 }
 
-vic2.renderStandardCharacterMode = function(col, row, x, y, dx, dy) {
-	var rowPos = row * 40;
+vic2.renderStandardCharacterMode = function(x, y, dx, dy) {
+	var col = x >> 3;
+	var rowPos = (y >> 3) * 40;
 	var content = vic2.memory.readByte(vic2.memorySetupRegister.pointerToScreenMemory + rowPos + col);
 	var charMemPos = vic2.memorySetupRegister.pointerToCharMemory + (content * 8);	
 	var color = vic2.memory.readByte(0xd800 + rowPos + col);
@@ -489,8 +485,9 @@ vic2.renderStandardCharacterMode = function(col, row, x, y, dx, dy) {
 	return { rendered: false, renderedBackgroundColor: false, badLine: false };
 };
 
-vic2.renderMultiColorCharacterMode = function(col, row, x, y, dx, dy) {
-	var rowPos = row * 40;
+vic2.renderMultiColorCharacterMode = function(x, y, dx, dy) {
+	var col = x >> 3;
+	var rowPos = (y >> 3) * 40;
 	var color = vic2.memory.readByte(0xd800 + (rowPos + col));
 	if ((color & 0x08) > 0) {
 		var textMemPos = vic2.memorySetupRegister.pointerToScreenMemory + (rowPos + col);
@@ -503,9 +500,38 @@ vic2.renderMultiColorCharacterMode = function(col, row, x, y, dx, dy) {
 		return { rendered: true, renderedBackgroundColor: colorBits < 2, badLine: y % 8 == 0 };
 	} else {
 		// if bit 3 of the color is high, this char should be rendered in standard mode
-	return vic2.renderStandardCharacterMode(col, row, x, y, dx, dy); 
+	return vic2.renderStandardCharacterMode(x, y, dx, dy);
 	}
 	return { rendered: false, renderedBackgroundColor: false , badLine: false};
+}
+
+vic2.renderStandardBitmapMode = function(x, y, dx, dy) {
+	var col = x >> 3, rowPos = (y >> 3) * 40;
+	if ((vic2.memory.readByte(vic2.memorySetupRegister.pointerToBitmapMemory + (rowPos + col) * 8 + y % 8) & (0x80 >> x % 8)) > 0) {
+		var color = vic2.memory.readByte(vic2.memorySetupRegister.pointerToScreenMemory + rowPos + col) >> 4;
+		this.putPixel(dx + this.screenControlRegister.xScroll, dy + this.screenControlRegister.yScroll - 3, color);
+		return { rendered: true, renderedBackgroundColor: color == vic2.backgroundColor, badLine: y % 8 == 0 };
+	}
+	return { rendered: false, renderedBackgroundColor: false, badLine: false };
+};
+
+vic2.renderMultiColorBitmapMode = function(x, y, dx, dy) {
+	var col = x >> 3, rowPos = (y >> 3) * 40, color;
+	switch ((vic2.memory.readByte(vic2.memorySetupRegister.pointerToBitmapMemory + (rowPos + col) * 8 + y % 8) >> (7 - x & 6)) & 3) {
+		case 0:
+			return { rendered: false, renderedBackgroundColor: false, badLine: false };
+		case 1:
+			color = vic2.memory.readByte(vic2.memorySetupRegister.pointerToScreenMemory + rowPos + col) >> 4;
+			break;
+		case 2:
+			color = vic2.memory.readByte(vic2.memorySetupRegister.pointerToScreenMemory + rowPos + col) & 15;
+			break;
+		case 3:
+			color = vic2.memory.readByte(0xd800 + rowPos + col);
+			break;
+	}
+	this.putPixel(dx + this.screenControlRegister.xScroll, dy + this.screenControlRegister.yScroll - 3, color);
+	return { rendered: true, renderedBackgroundColor: color == vic2.backgroundColor, badLine: y % 8 == 0 };
 }
 
 vic2.renderSprites = function(rx, ry, renderedBackgroundColorUnder) {
@@ -573,16 +599,14 @@ vic2.renderSprites = function(rx, ry, renderedBackgroundColorUnder) {
 vic2.rasterBeam = 0;
 
 vic2.process = function(frameCycle, frameInterlaceToggle) {	
-	var x = 0;
-	var y = 0;
 	var badLine = false;
 
 	var screenMargin = this.screenControlRegister.screenWidth ? 0 : 8;
 
 	for (var i = 0; i < 8; i++) {
 	
-			x = vic2.rasterBeam % 504;
-			y = (vic2.rasterBeam - x) / 504;
+			var x = vic2.rasterBeam % 504;
+			var y = (vic2.rasterBeam - x) / 504;
 			
 			if ((x > 119 && y > 19 && y < 292) && (y % 1 == frameInterlaceToggle)) {
 				var fromBorderX = x - 120;			// x = 0 where border starts
@@ -593,16 +617,18 @@ vic2.process = function(frameCycle, frameInterlaceToggle) {
 					var fromScreenY = y - 57;
 				
 					var rendered = null;
-					if (this.screenControlRegister.multiColor) {
-						rendered = this.renderMultiColorCharacterMode(
-						(fromScreenX - (fromScreenX % 8)) / 8, (fromScreenY - (fromScreenY % 8)) / 8, 
-						fromScreenX, fromScreenY,
-						fromBorderX, fromBorderY);    
+					if (this.screenControlRegister.renderMode) {
+						if (this.screenControlRegister.multiColor) {
+							rendered = this.renderMultiColorBitmapMode(fromScreenX, fromScreenY, fromBorderX, fromBorderY);
+						} else {
+							rendered = this.renderStandardBitmapMode(fromScreenX, fromScreenY, fromBorderX, fromBorderY);
+						}
 					} else {
-						rendered = this.renderStandardCharacterMode(
-						(fromScreenX - (fromScreenX % 8)) / 8, (fromScreenY - (fromScreenY % 8)) / 8, 
-						fromScreenX, fromScreenY,
-						fromBorderX, fromBorderY);    
+						if (this.screenControlRegister.multiColor) {
+							rendered = this.renderMultiColorCharacterMode(fromScreenX, fromScreenY, fromBorderX, fromBorderY);
+						} else {
+							rendered = this.renderStandardCharacterMode(fromScreenX, fromScreenY, fromBorderX, fromBorderY);
+						}
 					}
 					
 					badLine = rendered.badLine;
