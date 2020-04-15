@@ -1,6 +1,6 @@
 # c64js
 
-This is an embryo of a commodore 64 emulator, written from scratch in javascript. A demo of the emulator is available at [www.c64js.com](http://www.c64js.com).
+This is an embryo of a commodore 64 emulator, written from scratch in javascript. A demo of the emulator is available at [mborgbrant.github.io/c64js](http://mborgbrant.github.io/c64js/).
 
 ## Roms
 
